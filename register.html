@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="regester.css">
+    <title>register</title>
+</head>
+<body>
+    <form action="#">
+       <div class="box1">
+        <h1 id="no1">ReCircuit</h1><h1>EcoHub</h1>
+       </div>
+       <!--INPUT BOXES-->
+       <div class="box2">
+        <!--ACCOUNT DETAILS BOX-->
+        <div class="account">
+            <h1>1. Account details</h1>
+            <div class="h2">
+              <div class="name imp-1">
+                <label for="text">NAME:</label><br>
+                <input type="text" id="text" name="NAME">
+              </div> 
+              <div class="email imp-1">
+                <label for="email">EMAIL:</label><br>
+                <input type="email" id="email" name="EMAIL">
+              </div>
+              <div class="pass imp-1">
+                <label for="password">PASSWORD:</label><br>
+                <input type="password" name="PASSWORD" id="password">
+              </div>
+              <div class="conpass imp-1">
+                <label for="conform-password">CONFORM PASSWORD:</label><br>
+                <input type="password" id="conform-password" name="CONFORM PASSWORD">
+             </div> 
+             </div>
+        </div>
+        <!-- CONTACT INFORMATION-->
+        <div class="contact">
+            <h1>2. Contact Information</h1>
+            <div class="h2">
+            <div class="number imp-2">
+                <label for="phone number ">PHONE NUMBER:</label><br>
+                <input type="password" id="phone number" name="PHONE NUMBER">
+            </div>
+            <div class="address">
+                <label for="address"> COMPLETE ADDRESS:</label><br>
+                <input type="text" id="address" name="COMPLETE ADDRESS">
+            </div>
+            <div class="both">
+                <div class="city">
+                    <label for="city">CITY:</label><br>
+                    <input type="text" id="city" name="CITY">
+                </div>
+                <div class="pin">
+                    <label for="pin code">PIN CODE:</label><br>
+                    <input type="number" id="pin code" name="PIN CODE">
+                </div>
+            </div>
+        </div>
+        </div>
+       </div>
+       <div class="box3">
+        <div class="terms">
+            
+            <label for="click">Mandatory</label>
+            <input type="checkbox" name="Mandatory" id="click"> 
+            I agree to the
+            <a href="#">Terms & condition</a>
+            and
+            <a href="#">Privacy policy</a>
+            
+        </div>
+       </div>
+        <div class=" box4">
+            <input type="submit" value="SUBMIT ">
+       </div>
+      
+    </form>
+    
+</body>
+</html>

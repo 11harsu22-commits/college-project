@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ReCircuit - E-Waste Management & Recycling System</title>
+  <link rel="stylesheet" href="home.css">
+</head>
+<body>
+
+  <!-- 1. Header & Navigation -->
+  <header>
+    <nav class="navbar">
+      <div class="logo">
+        <a href="#">ReCircuit <span>EcoHub</span></a>
+      </div>
+      <ul class="nav-links">
+        <li><a href="#home">Home</a></li>
+        <li><a href="#sell">Sell E-Waste</a></li>
+        <li><a href="#parts">Buy Parts</a></li>
+        <li><a href="#b2b">B2B Recyclers</a></li>
+      </ul>
+      <div class="nav-buttons">
+        <a href="/login.html" class="btn btn-outline">Login</a>
+        <a href="/register.html" class="btn btn-secondary">Register</a>
+      </div>
+    </nav>
+  </header>
+
+ <!-- 2. Hero Section -->
+<section class="hero" id="home">
+  <div class="hero-content">
+   <div> <h1>Smart E-Waste Recycling & Spare Parts Marketplace</h1></div>
+    <div>
+      <p>Dispose of broken electronics safely, buy tested reusable components, or participate in certified recycler auctions.</p>
+    </div>
+    <div class="hero-actions">
+      <a href="#sell" class="btn btn-primary">Dispose / Sell E-Waste</a>
+      <a href="#parts" class="btn btn-secondary">Explore Spare Parts</a>
+    </div>
+   
+</div>
+  <div class="hero-img">
+    <img src="img\hero.jpeg" alt="ReCircuit EcoHub">
+  </div>
+  
+</section>
+
+  <!-- 3. Key Services / Features -->
+  <section class="features">
+    <h2>How Our Platform Works</h2>
+    <div class="features-grid">
+      
+      <div class="feature-card">
+        <div class="icon">♻️</div>
+        <h3>E-Waste Collection</h3>
+        <p>Schedule a pickup for old or broken household electronics and earn eco-credits or cash.</p>
+      </div>
+
+     g <div class="feature-card">
+        <div class="icon">⚙️</div>
+        <h3>Spare Parts Hub</h3>
+        <p>Buy tested, working components (RAM, screens, motors) for repairs at low prices.</p>
+      </div>
+
+      <div class="feature-card">
+        <div class="icon">🏭</div>
+        <h3>Verified B2B Recycling</h3>
+        <p>Dead scrap is routed exclusively to CPCB/RSPCB licensed recyclers for material extraction.</p>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- 4. Sell / Recycle Request Form (For General Public) -->
+  <section class="section-container" id="sell">
+    <div class="form-wrapper">
+      <h2>Sell or Recycle Your Old Electronics</h2>
+      <p>Fill out the details below to request a pickup or list an item.</p>
+
+      <form id="eWasteForm">
+        <div class="form-group">
+          <label for="deviceTitle">Device Name</label>
+          <input type="text" id="deviceTitle" placeholder="e.g., Old Dell Laptop, Broken Smartphone" required>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="category">Category</label>
+            <select id="category" required>
+              <option value="">Select Category</option>
+              <option value="Mobile">Mobile / Tablet</option>
+              <option value="Laptop">Laptop / PC</option>
+              <option value="PCB">Circuit Board / PCB</option>
+              <option value="HomeAppliance">Home Appliance</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="condition">Condition</label>
+            <select id="condition" required>
+              <option value="Working">Working (For Resale/Parts)</option>
+              <option value="NonWorking">Non-Working (For Parts)</option>
+              <option value="DeadScrap">Total Scrap (For Metal Recovery)</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="price">Expected Price (₹0 if donating for eco-credits)</label>
+          <input type="number" id="price" placeholder="e.g., 500" required>
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-block">Submit Item Request</button>
+      </form>
+    </div>
+  </section>
+
+  <!-- 5. Public Spare Parts Marketplace (Retail B2C) -->
+  <section class="section-container" id="parts">
+    <h2>Available Reusable Spare Parts</h2>
+    <p>Tested components available for technicians, students, and DIY builders.</p>
+
+    <div class="product-grid" id="partsGrid">
+      <!-- Dynamic Items will load from Express/MongoDB API -->
+      
+      <div class="product-card">
+        <div class="tag tag-success">Working</div>
+        <h3>Intel Core i5 8th Gen Processor</h3>
+        <p class="category">Category: Components</p>
+        <p class="price">₹1,500</p>
+        <button class="btn btn-secondary btn-sm">Buy Part</button>
+      </div>
+
+      <div class="product-card">
+        <div class="tag tag-warning">Non-Working (For Parts)</div>
+        <h3>iPhone 11 (Cracked Screen / Good Motherboard)</h3>
+        <p class="category">Category: Mobile</p>
+        <p class="price">₹2,200</p>
+        <button class="btn btn-secondary btn-sm">Buy Part</button>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- 6. Verified B2B Scrap Portal Info (Restricted Section) -->
+  <section class="b2b-banner" id="b2b">
+    <div class="b2b-content">
+      <h2>Are You a Certified E-Waste Recycler?</h2>
+      <p>Access our B2B bulk scrap auction portal. Requires valid CPCB/State Pollution Control Board License verification.</p>
+      <a href="/b2b-register.html" class="btn btn-outline-light">Apply for B2B Recycler Verification</a>
+    </div>
+  </section>
+
+  <!-- 7. Footer -->
+  <footer>
+    <div class="footer-content">
+      <p>&copy; 2026 ReCircuit. E-Waste Management & Recycling System (Academic Project).</p>
+      <ul class="footer-links">
+        <li><a href="#">Privacy Policy</a></li>
+        <li><a href="#">EPR Compliance</a></li>
+        <li><a href="#">Terms of Service</a></li>
+      </ul>
+    </div>
+  </footer>
+
+</body>
+</html>

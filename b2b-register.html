@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>B2B Verification - Eco-Waste Hub</title>
+    <link rel="stylesheet" href="b2b.css">
+</head>
+<body>
+
+<div class="verification-container">
+    <div class="form-card">
+        
+        <div class="header">
+            <i class="fa-solid fa-shield-halved badge-icon"></i>
+            <h1>B2B & Recycler Verification</h1>
+            <p>Upload official government licenses to get verified for bulk auctions & corporate pickup.</p>
+        </div>
+
+        <form action="/submit-b2b-docs" method="POST" enctype="multipart/form-data">
+            
+            <!-- SECTION 1: BUSINESS REGISTRATION -->
+            <div class="form-section">
+                <h2><i class="fa-solid fa-building"></i> 1. Legal Business Details</h2>
+                
+                <div class="input-group">
+                    <label for="company-name">Company / Recycling Unit Legal Name</label>
+                    <input type="text" id="company-name" name="company_name" placeholder="e.g., GreenRecycle India Pvt Ltd" required>
+                </div>
+
+                <div class="row">
+                    <div class="input-group">
+                        <label for="gstin">GSTIN Number</label>
+                        <input type="text" id="gstin" name="gstin" placeholder="22AAAAA0000A1Z5" required>
+                    </div>
+                    <div class="input-group">
+                        <label for="cpcb-id">CPCB / SPCB License Number</label>
+                        <input type="text" id="cpcb-id" name="cpcb_id" placeholder="CPCB/EW/2026/XXXX" required>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SECTION 2: DOCUMENT UPLOADS -->
+            <div class="form-section">
+                <h2><i class="fa-solid fa-file-contract"></i> 2. Upload Legal Certificates</h2>
+                
+                <div class="upload-box">
+                    <i class="fa-solid fa-cloud-arrow-up"></i>
+                    <p><strong>Upload GST Registration Certificate</strong></p>
+                    <small>Supports PDF, PNG, JPG (Max 5MB)</small>
+                    <input type="file" name="gst_cert" required>
+                </div>
+
+                <div class="upload-box">
+                    <i class="fa-solid fa-cloud-arrow-up"></i>
+                    <p><strong>Upload CPCB E-Waste Recycler License</strong></p>
+                    <small>Supports PDF, PNG, JPG (Max 5MB)</small>
+                    <input type="file" name="cpcb_cert" required>
+                </div>
+            </div>
+
+            <!-- STATUS CARD -->
+            <div class="status-box pending">
+                <i class="fa-solid fa-clock"></i>
+                <div>
+                    <h4>Current Status: <span>Unverified</span></h4>
+                    <p>After submission, verification takes 24-48 working hours.</p>
+                </div>
+            </div>
+
+            <!-- SUBMIT BUTTON -->
+            <button type="submit" class="btn-verify">SUBMIT DOCUMENTS FOR VERIFICATION</button>
+
+        </form>
+    </div>
+</div>
+
+</body>
+</html>
