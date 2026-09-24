@@ -2,7 +2,7 @@
    1. CORE VARIABLES & RESET
    ========================================== */
 :root {
-  --primary-green: #3f8d29; 
+  --primary-green: #528242; 
   --primary-dark: #059669;   
   --bg-dark: #0f172a;        
   --bg-card: #1e293b;         
@@ -10,7 +10,7 @@
   --text-main: #334155;       
   --text-light: #f1f5f9;       
   --text-muted: #64748b;     
-  --accent-blue: #360d7d;      
+  --accent-blue: #366558;      
   --border-color: #e2e8f0;    
   --radius: 12px;              
   --shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.4);
@@ -105,7 +105,7 @@ header {
 }
 
 .btn-primary:hover {
-  background-color: var(--primary-dark);
+  background-color: var(--primary-green);
   transform: translateY(-2px);
   box-shadow: 0 4px 12px rgba(16, 185, 129, 0.582);
 }
@@ -116,9 +116,9 @@ header {
 }
 
 .btn-secondary:hover {
-  background-color: hsl(221, 73%, 33%);
+  background-color:var(--accent-blue);
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(81, 103, 227, 0.582)
+  box-shadow: 0 4px 12px rgba(107, 231, 225, 0.582)
 }
 
 .btn-outline {
@@ -148,7 +148,8 @@ header {
 }
 
 .btn-sm {
-  padding: 0.4rem 0.8rem;
+  text-align: center;
+  padding: 0.2rem 0.8rem;
   font-size: 0.9rem;
 }
 
@@ -299,21 +300,35 @@ input:focus, select:focus {
    ========================================== */
 .product-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 2rem;
-  margin-top: 2rem;
+  grid-template-columns: repeat(2, minmax(280px, 1fr));
+  justify-content:center;
+  gap: 5rem;
+  margin-top: 5rem;
 }
 
 .product-card {
-  background: white;
+  box-shadow: var(--shadow);
   border-radius: var(--radius);
   padding: 1.5rem;
-  box-shadow: var(--shadow);
   border: 1px solid var(--border-color);
   position: relative;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+}
+.card1{
+  background-image: url('img/card1.jpeg');
+  background-size: cover;
+   background-position: center;
+   background-repeat: no-repeat;
+
+}
+.card2{
+  background-image: url('img/card2.jpeg');
+   background-size: cover;
+   background-position: center;
+   background-repeat: no-repeat;
+
 }
 
 .tag {
@@ -323,26 +338,43 @@ input:focus, select:focus {
   font-size: 0.75rem;
   font-weight: 700;
   margin-bottom: 0.8rem;
+  backdrop-filter: blur(5px);
 }
 
-.tag-success { background: #d1fae5; color: #065f46; }
-.tag-warning { background: #fef3c7; color: #92400e; }
+.tag-success { background: #d1fae562; color: #106049; }
+.tag-warning { background: #fef3c794; color: #361a09; }
 
 .product-card h3 {
+  background-color: rgba(76, 76, 73, 0.484);
+  color: white;
   font-size: 1.1rem;
   margin-bottom: 0.5rem;
+  padding: 0 1rem 0 1rem;
+  border-radius: 10px;
+  backdrop-filter: blur(5px);
 }
 
 .product-card .category {
+  align-self: flex-start;
   font-size: 0.85rem;
-  color: var(--text-muted);
+  border-radius: 10px;
+  padding: 0 1rem 0 1rem;
+  color:white;
+  background-color: rgba(112, 108, 108, 0.39);
+  backdrop-filter: blur(5px);
+  
 }
 
 .product-card .price {
-  font-size: 1.3rem;
-  font-weight: 800;
-  color: var(--primary-dark);
+  align-self: flex-start;
+  backdrop-filter: blur(4px);
+  background-color: rgba(81, 148, 107, 0.486);
+  border-radius: 10px;
+  font-size: 1rem;
+  font-weight: 700;
+  color:rgba(254, 253, 253, 0.904);
   margin: 1rem 0;
+  padding: 0 2rem
 }
 
 /* ==========================================

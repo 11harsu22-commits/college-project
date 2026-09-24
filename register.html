@@ -76,19 +76,25 @@
             <input type="submit" value="SUBMIT ">
        </div>
     </form>
- <script>
+<script>
 document.querySelector('form').addEventListener('submit', async (e) => {
-    e.preventDefault(); 
+    e.preventDefault();
 
     const formData = new FormData(e.target);
-    
-    
+
+    // Account details
     const username = formData.get('name')?.trim();
     const email = formData.get('email')?.trim();
     const password = formData.get('password');
     const cpassword = formData.get('cpassword');
 
-    
+    // Contact details
+    const phone = formData.get('phone')?.trim();
+    const address = formData.get('address')?.trim();
+    const city = formData.get('city')?.trim();
+    const pincode = formData.get('pincode')?.trim();
+
+    // Password check
     if (password !== cpassword) {
         alert('Passwords do not match');
         return;
@@ -100,17 +106,27 @@ document.querySelector('form').addEventListener('submit', async (e) => {
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ username, email, password })
+
+            body: JSON.stringify({
+                username: username,
+                email: email,
+                password: password,
+                phone: phone,
+                address: address,
+                city: city,
+                pincode: pincode
+            })
         });
 
         const data = await response.json();
 
         if (response.ok) {
             alert('Registration Successful! Redirecting to Login...');
-            window.location.href = 'login.html'; 
+            window.location.href = 'login.html';
         } else {
             alert(data.message || 'Registration failed');
         }
+
     } catch (error) {
         console.error('Error:', error);
         alert('An error occurred during registration. Please try again later.');
