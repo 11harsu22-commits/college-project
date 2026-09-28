@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Working Spare Parts - Eco-Waste Hub</title>
+    <link rel="stylesheet" href="working.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body>
+
+    <!-- Header / Navbar -->
+    <header class="shop-header">
+        <div class="logo">
+            <i class="fa-solid fa-recycle"></i> <span>Eco-Waste Hub</span>
+        </div>
+        <div class="shop-nav-links">
+            <a href="index.html"><i class="fa-solid fa-house"></i> Home</a>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <div class="parts-container">
+        <div class="page-title">
+            <h2>Available Reusable Spare Parts</h2>
+            <p>Select a component category below. Clicking it will let you choose your device type (Phone, Laptop, or Tablet).</p>
+        </div>
+
+        <!-- Parts Grid -->
+        <div class="parts-grid">
+
+            <!-- Part 1: Motherboard -->
+            <div class="part-card" onclick="selectPart('Motherboard')">
+                
+                <div class="part-img-box">
+                    <img src="img/motherboard.jpeg" alt="Motherboard" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                    <div class="fallback-icon" style="display:none;"><i class="fa-solid fa-microchip"></i></div>
+                </div>
+                <div class="part-content">
+                    <span class="badge">High Demand</span>
+                    <h3>Motherboards</h3>
+                    <p class="desc">Tested and working logic boards and chipsets for multiple device brands.</p>
+                    <div class="card-footer">
+                        <span class="price-from">Starts @ ₹1,200</span>
+                        <span class="click-hint">Select Device <i class="fa-solid fa-arrow-right"></i></span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Part 2: RAM / Memory -->
+            <div class="part-card" onclick="selectPart('RAM / Memory')">
+                <div class="part-img-box">
+                    <img src="img/ram.jpeg" alt="RAM" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                    <div class="fallback-icon" style="display:none;"><i class="fa-solid fa-memory"></i></div>
+                </div>
+                <div class="part-content">
+                    <span class="badge">100% Tested</span>
+                    <h3>RAM & Memory Modules</h3>
+                    <p class="desc">DDR3, DDR4 laptop/desktop memory sticks with health verified check.</p>
+                    <div class="card-footer">
+                        <span class="price-from">Starts @ ₹499</span>
+                        <span class="click-hint">Select Device <i class="fa-solid fa-arrow-right"></i></span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Part 3: Display Screens -->
+            <div class="part-card" onclick="selectPart('Display Screen')">
+                <div class="part-img-box">
+                    <img src="img/display.jpeg" alt="Screen" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                    <div class="fallback-icon" style="display:none;"><i class="fa-solid fa-display"></i></div>
+                </div>
+                <div class="part-content">
+                    <span class="badge">Zero Scratches</span>
+                    <h3>Display Screens & Panels</h3>
+                    <p class="desc">Original pull-out AMOLED, IPS, and LED laptop/phone display panels.</p>
+                    <div class="card-footer">
+                        <span class="price-from">Starts @ ₹999</span>
+                        <span class="click-hint">Select Device <i class="fa-solid fa-arrow-right"></i></span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Part 4: Batteries -->
+            <div class="part-card" onclick="selectPart('Battery')">
+                <div class="part-img-box">
+                    <img src="img/battery.jpeg" alt="Battery" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                    <div class="fallback-icon" style="display:none;"><i class="fa-solid fa-battery-half"></i></div>
+                </div>
+                <div class="part-content">
+                    <span class="badge">Good Health</span>
+                    <h3>Batteries & Power Units</h3>
+                    <p class="desc">Tested lithium-ion internal batteries with backup guarantee above 80%.</p>
+                    <div class="card-footer">
+                        <span class="price-from">Starts @ ₹699</span>
+                        <span class="click-hint">Select Device <i class="fa-solid fa-arrow-right"></i></span>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- JavaScript to handle click and redirect to Device Selection -->
+    <script>
+        function selectPart(partName) {
+            
+            localStorage.setItem("selectedPart", partName);
+    
+            window.location.href = "device_select.html?part=" + encodeURIComponent(partName);
+        }
+    </script>
+
+</body>
+</html>

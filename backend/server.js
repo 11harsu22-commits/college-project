@@ -41,9 +41,14 @@ app.post('/api/register', async (req, res) => {
         await newUser.save();
         res.status(201).json({ message: 'User registered successfully!' });
 
-    } catch (error) {
-        res.status(500).json({ message: 'Server Error', error: error.message });
-    }
+   } catch (error) {
+    console.error("REGISTER ERROR:", error);
+
+    res.status(500).json({
+        message: "Server Error",
+        error: error.message
+    });
+}
 });
 
 // 2. LOGIN ROUTE 
