@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Select Device Type - Eco-Waste Hub</title>
+    <link rel="stylesheet" href="device.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body>
+
+    <!-- Header / Navbar -->
+    <header class="shop-header">
+        <div class="logo">
+            <i class="fa-solid fa-recycle"></i> <span>Eco-Waste Hub</span>
+        </div>
+        <div class="shop-nav-links">
+            <a href="spare_parts.html"><i class="fa-solid fa-arrow-left"></i> Back to Parts</a>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <div class="device-container">
+        <div class="page-title">
+            
+            <span id="chosen-part-badge" class="sub-badge">Selected Part: Loading...</span>
+            <h2>Select Your Device Type</h2>
+            <p>Choose the category of device you want to find components for.</p>
+        </div>
+
+        <!-- Device Grid (Phone, Laptop, Tablet) -->
+        <div class="device-grid">
+
+            <!-- Option 1: Mobile Phone -->
+            <div class="device-card" onclick="selectDevice('Phone')">
+                <div class="device-img-box">
+                   
+                    <img src="YOUR_PHONE_IMAGE_URL_HERE" alt="Phone" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                    <div class="fallback-icon" style="display:none;"><i class="fa-solid fa-mobile-screen-button"></i></div>
+                </div>
+                <div class="device-content">
+                    <h3>Mobile Phones</h3>
+                    <p>Smartphones, feature phones, display assemblies, and internal modules.</p>
+                    <span class="action-link">Choose Models <i class="fa-solid fa-arrow-right"></i></span>
+                </div>
+            </div>
+
+            <!-- Option 2: Laptop -->
+            <div class="device-card" onclick="selectDevice('Laptop')">
+                <div class="device-img-box">
+                    <!-- इमेज URL स्लॉट: src में अपनी फोटो का लिंक या फोल्डर पाथ डालें -->
+                    <img src="YOUR_LAPTOP_IMAGE_URL_HERE" alt="Laptop" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                    <div class="fallback-icon" style="display:none;"><i class="fa-solid fa-laptop"></i></div>
+                </div>
+                <div class="device-content">
+                    <h3>Laptops & Notebooks</h3>
+                    <p>Motherboards, RAM sticks, SSDs, batteries, and screens for major brands.</p>
+                    <span class="action-link">Choose Models <i class="fa-solid fa-arrow-right"></i></span>
+                </div>
+            </div>
+
+            <!-- Option 3: Tablet -->
+            <div class="device-card" onclick="selectDevice('Tablet')">
+                <div class="device-img-box">
+                    <!-- इमेज URL स्लॉट: src में अपनी फोटो का लिंक या फोल्डर पाथ डालें -->
+                    <img src="YOUR_TABLET_IMAGE_URL_HERE" alt="Tablet" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                    <div class="fallback-icon" style="display:none;"><i class="fa-solid fa-tablet-screen-button"></i></div>
+                </div>
+                <div class="device-content">
+                    <h3>Tablets & iPads</h3>
+                    <p>Touch panels, charging flex cables, batteries, and logic boards.</p>
+                    <span class="action-link">Choose Models <i class="fa-solid fa-arrow-right"></i></span>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- JavaScript to capture part and device selection -->
+    <script>
+        // पीछे वाले पेज से पार्ट का नाम निकालना
+        const urlParams = new URLSearchParams(window.location.search);
+        const partName = urlParams.get('part') || localStorage.getItem("selectedPart") || "Spare Part";
+        
+        // पेज पर ऊपर बैज में दिखाना
+        document.getElementById('chosen-part-badge').innerText = "Selected Part: " + partName;
+
+        function selectDevice(deviceType) {
+            // डिवाइस टाइप को सेव करके अगले मॉडल पेज पर भेजना
+            localStorage.setItem("selectedDevice", deviceType);
+            window.location.href = `model_select.html?part=${encodeURIComponent(partName)}&device=${encodeURIComponent(deviceType)}`;
+        }
+    </script>
+
+</body>
+</html>
