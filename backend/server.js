@@ -5,11 +5,19 @@ const cors = require('cors');
 const bcrypt = require('bcryptjs');
 const User = require('./models/user');
 
+const multer = require("multer");
+const B2BVerification = require("./models/B2BVerification");
+
 const app = express();
 
 // Middleware
 app.use(express.json());
 app.use(cors()); 
+
+const upload = multer({
+    storage: multer.memoryStorage(),
+    limits: { fileSize: 5 * 1024 * 1024 }
+});
 
 // MongoDB Connection
 mongoose.connect(process.env.MONGO_URI)
@@ -74,6 +82,52 @@ app.post('/api/login', async (req, res) => {
         res.status(500).json({ message: 'Server Error', error: error.message });
     }
 });
+
+// B2B Verification Route
+app.post(
+    "/submit-b2b-docs",
+    upload.fields([
+        { name: "gst_cert", maxCount: 1 },
+        { name: "cpcb_cert", maxCount: 1 }
+    ]),
+    async (req, res) => {
+        try {
+            const { company_name, gstin, cpcb_id } = req.body;
+
+            const gstFile = req.files?.gst_cert?.[0];
+            const cpcbFile = req.files?.cpcb_cert?.[0];
+
+            if (!company_name || !gstin || !cpcb_id || !gstFile || !cpcbFile) {
+                return res.status(400).send("Please fill all details and upload both documents.");
+            }
+
+            const verification = new B2BVerification({
+                company_name,
+                gstin,
+                cpcb_id,
+
+                gst_cert: {
+                    filename: gstFile.originalname,
+                    contentType: gstFile.mimetype,
+                    data: gstFile.buffer
+                },
+
+                cpcb_cert: {
+                    filename: cpcbFile.originalname,
+                    contentType: cpcbFile.mimetype,
+                    data: cpcbFile.buffer
+                }
+            });
+
+            await verification.save();
+
+            res.status(201).send("Documents submitted successfully! Status: Pending.");
+        } catch (error) {
+            console.error("B2B VERIFICATION ERROR:", error);
+            res.status(500).send("Could not submit documents.");
+        }
+    }
+);
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

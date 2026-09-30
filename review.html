@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Review Pickup Request</title>
+    <link rel="stylesheet" href="review.css">
+</head>
+<body>
+
+<div class="card">
+    <h1>Review Pickup Request</h1>
+
+    <div id="details">Loading pickup details...</div>
+
+    <button id="confirmBtn">CONFIRM REQUEST</button>
+    <button class="back" onclick="history.back()">GO BACK</button>
+</div>
+
+<script>
+const details = JSON.parse(sessionStorage.getItem("pickupDetails"));
+const detailsBox = document.getElementById("details");
+const confirmBtn = document.getElementById("confirmBtn");
+
+if (!details) {
+    detailsBox.textContent = "Pickup details nahi mili. Please form dobara bharo.";
+    confirmBtn.disabled = true;
+} else {
+    detailsBox.innerHTML = `
+        <p><strong>E-Waste Type:</strong> ${details.ewasteType}</p>
+        <p><strong>Quantity:</strong> ${details.quantity}</p>
+        <p><strong>Pickup Date:</strong> ${details.pickupDate}</p>
+        <p><strong>Pickup Time:</strong> ${details.pickupTime}</p>
+        <p><strong>Address:</strong> ${details.address}</p>
+        <p><strong>City:</strong> ${details.city}</p>
+        <p><strong>PIN Code:</strong> ${details.pincode}</p>
+        <p><strong>Additional Note:</strong> ${details.note || "None"}</p>
+    `;
+}
+
+confirmBtn.addEventListener("click", function() {
+    if (!details) return;
+    window.location.href = "success.html";
+});
+</script>
+
+</body>
+</html>

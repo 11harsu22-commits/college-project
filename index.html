@@ -79,7 +79,7 @@
       <h2>Sell or Recycle Your Old Electronics</h2>
       <p>Fill out the details below to request a pickup or list an item.</p>
 
-      <form id="eWasteForm">
+      <form id="itemForm">
         <div class="form-group">
           <label for="deviceTitle">Device Name</label>
           <input type="text" id="deviceTitle" placeholder="e.g., Old Dell Laptop, Broken Smartphone" required>
@@ -164,6 +164,12 @@
       </ul>
     </div>
   </footer>
+<script>
+document.getElementById("itemForm").addEventListener("submit", function(e) {
+    e.preventDefault();
 
+    window.location.href = "pickup.html";
+});
+</script>
 </body>
 </html>

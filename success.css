@@ -1,0 +1,66 @@
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    font-family: Arial, sans-serif;
+    background: #f2f8f3;
+}
+
+.success-container {
+    width: 100%;
+    max-width: 550px;
+    padding: 35px 25px;
+    text-align: center;
+    background: white;
+    border-radius: 14px;
+    box-shadow: 0 4px 18px #00000015;
+}
+
+.checkmark {
+    width: 75px;
+    height: 75px;
+    margin: 0 auto 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #247a45;
+    color: white;
+    border-radius: 50%;
+    font-size: 45px;
+}
+
+h1 {
+    color: #247a45;
+    font-size: 26px;
+}
+
+p {
+    color: #555;
+    line-height: 1.6;
+}
+
+.message {
+    margin-top: 15px;
+}
+
+button {
+    margin-top: 20px;
+    padding: 13px 25px;
+    border: none;
+    border-radius: 7px;
+    background: #247a45;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+button:hover {
+    background: #195d33;
+}

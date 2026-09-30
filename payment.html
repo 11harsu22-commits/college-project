@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment Preference</title>
+    <link rel="stylesheet" href="payment.css">
+</head>
+<body>
+
+    <div class="container">
+        <h2>Payment Preference</h2>
+        <p>Choose how you would like to receive payment for your e-waste.</p>
+
+        <form id="paymentForm">
+            <label class="option">
+                <input type="radio" name="paymentMethod" value="UPI" required>
+                <span>UPI</span>
+            </label>
+
+            <label class="option">
+                <input type="radio" name="paymentMethod" value="Bank Transfer">
+                <span>Bank Transfer</span>
+            </label>
+
+            <label class="option">
+                <input type="radio" name="paymentMethod" value="Donate">
+                <span>Donate the amount</span>
+            </label>
+
+            <button type="submit">Continue to Review</button>
+        </form>
+    </div>
+
+    <script>
+        document.getElementById("paymentForm").addEventListener("submit", function(event) {
+            event.preventDefault();
+
+            const selected = document.querySelector(
+                'input[name="paymentMethod"]:checked'
+            );
+
+            if (!selected) {
+                alert("Please choose a payment preference.");
+                return;
+            }
+
+            sessionStorage.setItem("paymentMethod", selected.value);
+            window.location.href = "review.html";
+        });
+    </script>
+
+</body>
+</html>

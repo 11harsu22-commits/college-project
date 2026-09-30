@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>E-Waste Pickup Request</title>
+    <link rel="stylesheet" href="pickup.css">
+</head>
+
+<body>
+
+    <div class="pickup-container">
+
+        <div class="pickup-box">
+            <h1>E-Waste Pickup Request</h1>
+            <p>Schedule your e-waste collection easily</p>
+
+            <form id="pickupForm">
+
+                <label for="ewasteType">E-Waste Type</label>
+                <select id="ewasteType" required>
+                    <option value="">Select E-Waste</option>
+                    <option value="Mobile">Mobile</option>
+                    <option value="Laptop">Laptop</option>
+                    <option value="Computer">Computer</option>
+                    <option value="Television">Television</option>
+                    <option value="Battery">Battery</option>
+                    <option value="Other">Other</option>
+                </select>
+
+                <label for="quantity">Quantity</label>
+                <input type="number" id="quantity" min="1"
+                       placeholder="Enter quantity" required>
+
+                <label for="pickupDate">Pickup Date</label>
+                <input type="date" id="pickupDate" required>
+
+                <label for="pickupTime">Pickup Time</label>
+                <select id="pickupTime" required>
+                    <option value="">Select Time</option>
+                    <option value="09:00 AM - 11:00 AM">09:00 AM - 11:00 AM</option>
+                    <option value="11:00 AM - 01:00 PM">11:00 AM - 01:00 PM</option>
+                    <option value="02:00 PM - 04:00 PM">02:00 PM - 04:00 PM</option>
+                    <option value="04:00 PM - 06:00 PM">04:00 PM - 06:00 PM</option>
+                </select>
+
+                <label for="address">Address</label>
+                <textarea id="address"
+                          placeholder="Enter your complete address"
+                          required></textarea>
+
+                <div class="row">
+                    <div>
+                        <label for="city">City</label>
+                        <input type="text" id="city"
+                               placeholder="Enter city" required>
+                    </div>
+
+                    <div>
+                        <label for="pincode">PIN Code</label>
+                        <input type="text" id="pincode"
+                               placeholder="Enter PIN code"
+                               maxlength="6" required>
+                    </div>
+                </div>
+
+                <label for="note">Additional Note</label>
+                <textarea id="note"
+                          placeholder="Any additional information"></textarea>
+
+                <button type="submit">REQUEST PICKUP</button>
+
+            </form>
+        </div>
+
+    </div>
+     <script>
+    const pickupForm = document.getElementById("pickupForm");
+
+pickupForm.addEventListener("submit", function(event) {
+    event.preventDefault();
+
+    const ewasteType = document.getElementById("ewasteType").value;
+    const quantity = document.getElementById("quantity").value;
+    const pickupDate = document.getElementById("pickupDate").value;
+    const pickupTime = document.getElementById("pickupTime").value;
+    const address = document.getElementById("address").value.trim();
+    const city = document.getElementById("city").value.trim();
+    const pincode = document.getElementById("pincode").value.trim();
+    const note = document.getElementById("note").value.trim();
+
+    if (!/^\d{6}$/.test(pincode)) {
+        alert("Please enter a valid 6-digit PIN code.");
+        return;
+    }
+
+    if (Number(quantity) < 1) {
+        alert("Quantity must be at least 1.");
+        return;
+    }
+
+    const pickupDetails = {
+        ewasteType,
+        quantity,
+        pickupDate,
+        pickupTime,
+        address,
+        city,
+        pincode,
+        note
+    };
+
+    sessionStorage.setItem("pickupDetails", JSON.stringify(pickupDetails));
+
+    window.location.href = "payment.html";
+});
+ </script>
+</body>
+</html>
