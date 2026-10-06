@@ -21,10 +21,16 @@
         <li><a href="#parts">Buy Parts</a></li>
         <li><a href="#b2b">B2B Recyclers</a></li>
       </ul>
-      <div class="nav-buttons">
-        <a href="login.html" class="btn btn-outline">Login</a>
-        <a href="register.html" class="btn btn-secondary">Register</a>
-      </div>
+    <div class="nav-buttons">
+  
+  <a href="login.html" id="login-btn" class="btn btn-outline">Login</a>
+  <a href="register.html" id="register-btn" class="btn btn-secondary">Register</a>
+  
+  <!-- Profile button (suruat me profile chhipega) -->
+  <a href="profile.html" id="profile-btn" class="btn btn-outline hidden">
+    <img src="default-avatar.png" alt="Profile" style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover; .hidden { display: none; }">
+  </a>
+</div>
     </nav>
   </header>
 
@@ -138,7 +144,7 @@
         <h3>CPCB-Certified Industrial E-Waste Scrap</h3>
         <p class="category">Category: B2B</p>
         <p class="price">Starting at ₹2,200</p>
-        <a href="#" class="btn btn-secondary btn-sm">Buy Part</a>
+        <a href="#" id="b2bBuyBtn" class="btn btn-secondary btn-sm">Buy Part</a>
       </div>
 
     </div>
@@ -164,12 +170,137 @@
       </ul>
     </div>
   </footer>
-<script>
-document.getElementById("itemForm").addEventListener("submit", function(e) {
+  <script>
+document.getElementById("itemForm").addEventListener("submit", async function(e) {
     e.preventDefault();
+    
+    // 1. Check if the user is logged in by verifying the JWT token in localStorage
+    const token = localStorage.getItem("token");
 
-    window.location.href = "pickup.html";
+    if (!token) {
+        alert("Please login first to sell or recycle your device!");
+        window.location.href = "login.html"; // Redirect to login page
+        return;
+    }
+
+    const category = document.getElementById("category").value;
+    const price = Number(document.getElementById("price").value);
+
+    // 2. Define category-wise price limits (Price Validation Rules)
+    const priceRules = {
+        "Mobile": { min: 500, max: 20000 },
+        "Laptop": { min: 2000, max: 50000 },
+        "Computer": { min: 1500, max: 35000 },
+        "Television": { min: 1000, max: 25000 },
+        "Battery": { min: 100, max: 2000 },
+        "Other": { min: 50, max: 10000 }
+    };
+
+    // 3. Validate price against selected category limits
+    if (priceRules[category]) {
+        const rule = priceRules[category];
+        if (price < rule.min || price > rule.max) {
+            alert(`For ${category}, the expected price must be between ₹${rule.min} and ₹${rule.max}.`);
+            return; // Stop form submission if price is out of range
+        }
+    }
+
+    // 4. Gather form input data
+    const formData = {
+        item_name: document.getElementById("deviceTitle").value,
+        category: category,
+        condition: document.getElementById("condition").value,
+        expected_price: price
+    };
+
+    try {
+        // 5. Send data to the backend API
+        const response = await fetch("http://localhost:5000/api/sell-spare-part", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${token}` // Attach JWT token for authentication
+            },
+            body: JSON.stringify(formData)
+        });
+
+        const result = await response.json();
+
+        if (response.ok) {
+            alert("Device details submitted successfully! Now schedule your pickup.");
+            
+            // Save the newly created spare part ID so pickup page can update it
+            localStorage.setItem("savedPartId", result._id || result.id || result.savedPart?._id);
+
+            document.getElementById("itemForm").reset(); // Clear the form fields
+            
+            // Redirect to pickup page
+            window.location.href = "pickup.html";
+        } else {
+            alert("Error: " + result.message);
+        }
+    } catch (error) {
+        console.error("Error:", error);
+        alert("Failed to connect to the server!");
+    }
 });
+  </script>
+    <script>
+        document.getElementById("b2bBuyBtn").addEventListener("click", async function(event) {
+            event.preventDefault(); // पेज को सीधे खुलने से रोकेगा
+
+            const token = localStorage.getItem("token");
+
+            if (!token) {
+                alert("Please login first!");
+                window.location.href = "login.html";
+                return;
+            }
+
+            try {
+                const response = await fetch("http://localhost:5000/api/b2b/check-status", {
+                    method: "GET",
+                    headers: {
+                        "Authorization": `Bearer ${token}`
+                    }
+                });
+
+                const data = await response.json();
+
+                if (response.ok && data.status === "Verified") {
+                    window.location.href = "bulk-parts.html"; // यहाँ अपने बल्क वाले पेज का नाम लिख देना
+                } else if (data.status === "Pending") {
+                    alert("Your B2B verification is still pending. Please wait for admin approval.");
+                } else {
+                    alert("You need to complete B2B verification first to access bulk parts.");
+                    window.location.href = "b2b-register.html";
+                }
+            } catch (error) {
+                console.error("Error:", error);
+                alert("Failed to connect to the server.");
+            }
+        });
+    </script>
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const token = localStorage.getItem("token");
+
+    const loginBtn = document.getElementById("login-btn");
+    const registerBtn = document.getElementById("register-btn");
+    const profileBtn = document.getElementById("profile-btn");
+
+    if (token) {
+      // agar user login h to profile button dikhega login/register hide hoga
+      if (loginBtn) loginBtn.style.display = "none";
+      if (registerBtn) registerBtn.style.display = "none";
+      if (profileBtn) profileBtn.style.display = "inline-block";
+    } else {
+      // user login ni h to Login/Register dikhega profile button hide hoga
+      if (loginBtn) loginBtn.style.display = "inline-block";
+      if (registerBtn) registerBtn.style.display = "inline-block";
+      if (profileBtn) profileBtn.style.display = "none";
+    }
+  });
 </script>
 </body>
 </html>

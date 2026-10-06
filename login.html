@@ -7,14 +7,14 @@
     <title>Login</title>
 </head>
 <body>
-    <form action="#" class="box">
+    <form id="loginForm" action="#" class="box">
 
     <div><h1>LOGIN</h1></div>
     <div class="inputbox">
-     <input type="email" class="box1" placeholder="Enter email">
+     <input type="email" id="email" class="box1" placeholder="Enter email">
      </div>
      <div class="inputbox">
-     <input type="password" class="box1" placeholder="Enter password">
+     <input type="password" id="password" class="box1" placeholder="Enter password">
      </div>
     <div class="signin">
         <input type="submit" class="box3" value="Sign In">
@@ -24,7 +24,7 @@
         <a href="#">Forgot password</a>
     </div>
     <div class="signupbox">
-          <a href="/college project/register/register.html">Sign Up</a>
+          <a href="register.html">Sign Up</a>
     </div>
     </div>
 
@@ -49,14 +49,14 @@ document.getElementById("loginForm").addEventListener("submit", async function(e
             })
         });
 
-        const data = await response.json();
+       const data = await response.json();
 
-        alert(data.message);
-
-        if (response.ok) {
-            window.location.href = "../home/home.html";
-        }
-
+if (response.ok) {
+    localStorage.setItem("token", data.token);
+    window.location.href = "index.html";
+} else {
+    alert(data.message);
+}
     } catch (error) {
         console.error("LOGIN ERROR:", error);
         alert("Server se connect nahi ho pa raha!");

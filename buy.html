@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Buy Spare Parts - Eco-Waste Hub</title>
+    <!-- अलग से CSS फाइल लिंक की गई है -->
+    <link rel="stylesheet" href="buy.css">
+</head>
+<body>
+
+    <header>
+        <nav class="navbar">
+            <div class="logo"><a href="index.html">ReCircuit <span>EcoHub</span></a></div>
+            <div class="nav-links"><a href="working.html">Back to Parts</a></div>
+        </nav>
+    </header>
+
+    <div class="container">
+        <h2 id="pageTitle">Select Your Device Model</h2>
+        <p id="subTitle">Choose a model below to proceed with your mock purchase.</p>
+
+        <!-- Dynamic Models Grid -->
+        <div class="model-list" id="modelsGrid">
+            <!-- JavaScript यहाँ मॉडल्स लोड करेगा -->
+        </div>
+
+        <!-- Checkout / Mock Payment Section -->
+        <div class="checkout-box" id="checkoutSection">
+            <h3>Complete Your Mock Order</h3>
+            <p>Selected Model: <strong id="selectedModelText">None</strong></p>
+            
+            <label>Select Payment Mode (For College Demo):</label>
+            <div class="payment-options">
+                <label><input type="radio" name="payment" value="UPI" checked> UPI (GPay/PhonePe)</label>
+                <label><input type="radio" name="payment" value="Bank Transfer"> Net Banking</label>
+                <label><input type="radio" name="payment" value="Donate"> Eco-Donate (0 ₹)</label>
+            </div>
+
+            <button onclick="confirmPurchase()" class="btn btn-primary">Confirm & Save to Database</button>
+        </div>
+    </div>
+
+    <script>
+        // URL से पार्ट और डिवाइस टाइप फेच करना
+        const urlParams = new URLSearchParams(window.location.search);
+        const deviceType = urlParams.get('device') || localStorage.getItem("selectedDevice") || "Phone";
+        const partName = urlParams.get('part') || localStorage.getItem("selectedPart") || "Battery";
+
+        document.getElementById("pageTitle").innerText = `${partName} for ${deviceType}`;
+        
+        // कॉलेज प्रोजेक्ट के लिए फिक्सड 10 डमी मॉडल्स (कैटेगरी के हिसाब से)
+        const mockModels = {
+            "Phone": ["iPhone 13", "Samsung Galaxy S21", "OnePlus Nord", "Redmi Note 10", "Realme 8", "iPhone 11", "Poco X3", "Vivo V20", "Oppo F19", "Moto G40"],
+            "Laptop": ["Dell Inspiron 15", "HP Pavilion", "Lenovo ThinkPad", "Asus VivoBook", "MacBook Air M1", "Acer Aspire 5", "MSI Modern", "Microsoft Surface", "Toshiba Satellite", "Samsung Galaxy Book"],
+            "Tablet": ["iPad Pro 11", "iPad 9th Gen", "Samsung Galaxy Tab S7", "Lenovo Tab M10", "Realme Pad", "Huawei MatePad", "Xiaomi Pad 5", "Asus ZenPad", "Amazon Fire HD", "Microsoft Go"]
+        };
+
+        let chosenModel = "";
+
+        function loadModels() {
+            const grid = document.getElementById("modelsGrid");
+            grid.innerHTML = "";
+
+            const models = mockModels[deviceType] || mockModels["Phone"];
+
+            models.forEach(model => {
+                const card = document.createElement("div");
+                card.className = "model-card";
+                card.innerHTML = `<h4>${model}</h4><p>Condition: Certified Tested (90% Health)</p><p style="color:green; font-weight:bold;">₹ 1,499</p>`;
+                card.onclick = () => {
+                    // सिलेक्टेड क्लास हटाना/जोड़ना
+                    document.querySelectorAll('.model-card').forEach(c => c.classList.remove('selected'));
+                    card.classList.add('selected');
+                    chosenModel = model;
+                    
+                    // चेकआउट बॉक्स दिखाना
+                    document.getElementById("selectedModelText").innerText = model;
+                    document.getElementById("checkoutSection").style.display = "block";
+                };
+                grid.appendChild(card);
+            });
+        }
+
+        async function confirmPurchase() {
+            const token = localStorage.getItem("token");
+            if (!token) {
+                alert("Please login first to complete the purchase!");
+                window.location.href = "login.html";
+                return;
+            }
+
+            if (!chosenModel) {
+                alert("Please select a model first!");
+                return;
+            }
+
+            const paymentMethod = document.querySelector('input[name="payment"]:checked').value;
+
+            const orderData = {
+                device_type: deviceType,
+                part_name: partName,
+                model_name: chosenModel,
+                payment_method: paymentMethod
+            };
+
+            try {
+                const response = await fetch("http://localhost:5000/api/buy-item", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Authorization": `Bearer ${token}`
+                    },
+                    body: JSON.stringify(orderData)
+                });
+
+                const result = await response.json();
+
+                if (response.ok) {
+                    alert("🎉 Order Successful! Data has been successfully saved to MongoDB Database.");
+                    window.location.href = "index.html"; // होमपेज पर वापस भेजना
+                } else {
+                    alert("Error: " + result.message);
+                }
+            } catch (err) {
+                console.error("Error:", err);
+                alert("Server connection failed!");
+            }
+        }
+
+        loadModels();
+    </script>
+</body>
+</html>

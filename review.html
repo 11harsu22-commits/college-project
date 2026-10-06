@@ -3,46 +3,56 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Review Pickup Request</title>
+    <title>Review Order - E-Waste Platform</title>
     <link rel="stylesheet" href="review.css">
 </head>
 <body>
 
-<div class="card">
-    <h1>Review Pickup Request</h1>
+    <div class="container">
+        <h2>Review Your Request</h2>
+        <p>Please check your details before final confirmation.</p>
 
-    <div id="details">Loading pickup details...</div>
+        <div class="review-box" id="reviewDetails">
+            <p>Loading your details...</p>
+        </div>
 
-    <button id="confirmBtn">CONFIRM REQUEST</button>
-    <button class="back" onclick="history.back()">GO BACK</button>
-</div>
+        <button id="confirmBtn" type="button">Confirm & Submit Order</button>
+    </div>
 
-<script>
-const details = JSON.parse(sessionStorage.getItem("pickupDetails"));
-const detailsBox = document.getElementById("details");
-const confirmBtn = document.getElementById("confirmBtn");
+    <script>
+        
+        const paymentMethod = sessionStorage.getItem("paymentMethod") || "Not Selected";
 
-if (!details) {
-    detailsBox.textContent = "Pickup details nahi mili. Please form dobara bharo.";
-    confirmBtn.disabled = true;
-} else {
-    detailsBox.innerHTML = `
-        <p><strong>E-Waste Type:</strong> ${details.ewasteType}</p>
-        <p><strong>Quantity:</strong> ${details.quantity}</p>
-        <p><strong>Pickup Date:</strong> ${details.pickupDate}</p>
-        <p><strong>Pickup Time:</strong> ${details.pickupTime}</p>
-        <p><strong>Address:</strong> ${details.address}</p>
-        <p><strong>City:</strong> ${details.city}</p>
-        <p><strong>PIN Code:</strong> ${details.pincode}</p>
-        <p><strong>Additional Note:</strong> ${details.note || "None"}</p>
-    `;
-}
+        const reviewBox = document.getElementById("reviewDetails");
+        reviewBox.innerHTML = `
+            <p><strong>Payment Preference:</strong> ${paymentMethod}</p>
+            <p>Your e-waste collection and item details are ready to be finalized.</p>
+        `;
 
-confirmBtn.addEventListener("click", function() {
-    if (!details) return;
-    window.location.href = "success.html";
-});
-</script>
+        document.getElementById("confirmBtn").addEventListener("click", async function() {
+            const token = localStorage.getItem("token");
+            
+            if (!token) {
+                alert("Session expired. Please login again.");
+                window.location.href = "login.html";
+                return;
+            }
+
+            try {
+                
+                alert("Order confirmed successfully! Thank you for recycling with us.");
+                
+                
+                sessionStorage.removeItem("paymentMethod");
+                
+            
+                window.location.href = "success.html";
+            } catch (error) {
+                console.error("Error:", error);
+                alert("Something went wrong during confirmation.");
+            }
+        });
+    </script>
 
 </body>
 </html>

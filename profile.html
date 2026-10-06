@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Profile - RecCircuit EcoHub</title>
+    <link rel="stylesheet" href="/profile.css">
+</head>
+<body>
+
+    <div class="profile-container">
+        <h2>User Profile</h2>
+        
+        <!-- Circular profile picture -->
+        <div class="profile-img-container">
+            <img id="user-avatar" src="default-avatar.png" alt="Profile Picture" class="profile-img">
+        </div>
+
+        <!-- User details container -->
+        <div class="profile-info">
+            <p><strong>Name:</strong> <span id="user-name">Loading...</span></p>
+            <p><strong>Email:</strong> <span id="user-email">Loading...</span></p>
+            <p><strong>Phone:</strong> <span id="user-phone">Loading...</span></p>
+        </div>
+
+        <!-- Logout button -->
+        <button id="logout-btn" class="btn-logout">Logout</button>
+        
+        <br>
+        <a href="index.html" class="btn-back">← Back to Home Page</a>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", async () => {
+            const token = localStorage.getItem("token");
+
+            // 1. If token does not exist, redirect user to login page
+            if (!token) {
+                window.location.href = "login.html";
+                return;
+            }
+
+            try {
+                // 2. Fetch user data from backend
+                const response = await fetch("http://localhost:5000/api/user/profile", {
+                    method: "GET",
+                    headers: {
+                        "Authorization": `Bearer ${token}`
+                    }
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    // Populate user data into HTML elements
+                    document.getElementById("user-name").innerText = data.name || "N/A";
+                    document.getElementById("user-email").innerText = data.email || "N/A";
+                    document.getElementById("user-phone").innerText = data.phone || "N/A";
+                    
+                    // Update profile picture if available in database
+                    if (data.profilePic) {
+                        document.getElementById("user-avatar").src = data.profilePic;
+                    }
+                } else {
+                    // Handle session expiry or invalid token
+                    alert(data.message || "Session expired. Please log in again.");
+                    localStorage.removeItem("token");
+                    window.location.href = "login.html";
+                }
+            } catch (error) {
+                console.error("Error fetching user data:", error);
+            }
+
+            // 3. Logout button logic
+            document.getElementById("logout-btn").addEventListener("click", () => {
+                localStorage.removeItem("token"); // Remove token
+                window.location.href = "index.html"; // Redirect to homepage
+            });
+        });
+    </script>
+</body>
+</html>

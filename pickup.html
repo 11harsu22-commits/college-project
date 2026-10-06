@@ -75,10 +75,25 @@
 
     </div>
      <script>
-    const pickupForm = document.getElementById("pickupForm");
+   const pickupForm = document.getElementById("pickupForm");
 
-pickupForm.addEventListener("submit", function(event) {
+pickupForm.addEventListener("submit", async function(event) {
     event.preventDefault();
+
+    const token = localStorage.getItem("token");
+    const savedPartId = localStorage.getItem("savedPartId");
+
+    if (!token) {
+        alert("Please login first!");
+        window.location.href = "login.html";
+        return;
+    }
+
+    if (!savedPartId) {
+        alert("No item found to schedule pickup. Please submit the item form first!");
+        window.location.href = "index.html";
+        return;
+    }
 
     const ewasteType = document.getElementById("ewasteType").value;
     const quantity = document.getElementById("quantity").value;
@@ -104,15 +119,34 @@ pickupForm.addEventListener("submit", function(event) {
         quantity,
         pickupDate,
         pickupTime,
-        address,
-        city,
-        pincode,
-        note
+        address: `${address}, City: ${city} - ${pincode}`,
+        note,
+        pickup_status: "Scheduled"
     };
 
-    sessionStorage.setItem("pickupDetails", JSON.stringify(pickupDetails));
+    try {
+        const response = await fetch(`http://localhost:5000/api/update-pickup/${savedPartId}`, {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${token}`
+            },
+            body: JSON.stringify(pickupDetails)
+        });
 
-    window.location.href = "payment.html";
+        const result = await response.json();
+
+        if (response.ok) {
+            alert("Pickup scheduled successfully and saved to database!");
+            localStorage.removeItem("savedPartId"); // Clean up
+            window.location.href = "payment.html";
+        } else {
+            alert("Error: " + result.message);
+        }
+    } catch (error) {
+        console.error("Error:", error);
+        alert("Failed to connect to the server!");
+    }
 });
  </script>
 </body>

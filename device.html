@@ -78,17 +78,17 @@
 
     <!-- JavaScript to capture part and device selection -->
     <script>
-        // पीछे वाले पेज से पार्ट का नाम निकालना
+        
         const urlParams = new URLSearchParams(window.location.search);
         const partName = urlParams.get('part') || localStorage.getItem("selectedPart") || "Spare Part";
         
-        // पेज पर ऊपर बैज में दिखाना
+        
         document.getElementById('chosen-part-badge').innerText = "Selected Part: " + partName;
 
         function selectDevice(deviceType) {
-            // डिवाइस टाइप को सेव करके अगले मॉडल पेज पर भेजना
+            
             localStorage.setItem("selectedDevice", deviceType);
-            window.location.href = `model_select.html?part=${encodeURIComponent(partName)}&device=${encodeURIComponent(deviceType)}`;
+            window.location.href = `buy.html?part=${encodeURIComponent(partName)}&device=${encodeURIComponent(deviceType)}`;
         }
     </script>
 

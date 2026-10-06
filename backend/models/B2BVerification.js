@@ -1,6 +1,11 @@
 const mongoose = require("mongoose");
 
 const b2bVerificationSchema = new mongoose.Schema({
+    userId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
+        required: true
+    },
     company_name: { type: String, required: true },
     gstin: { type: String, required: true },
     cpcb_id: { type: String, required: true },
