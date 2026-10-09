@@ -27,8 +27,10 @@
   <a href="register.html" id="register-btn" class="btn btn-secondary">Register</a>
   
   <!-- Profile button (suruat me profile chhipega) -->
-  <a href="profile.html" id="profile-btn" class="btn btn-outline hidden">
-    <img src="default-avatar.png" alt="Profile" style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover; .hidden { display: none; }">
+  <a href="profile.html" id="profile-btn" class="btn btn-outline hidden" style="text-decoration: none; padding: 0; border: none;">
+    <div id="profileAvatar" style="width: 40px; height: 40px; background-color: #2a704f; color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 16px;">
+      U
+    </div>
   </a>
 </div>
     </nav>
@@ -247,7 +249,7 @@ document.getElementById("itemForm").addEventListener("submit", async function(e)
   </script>
     <script>
         document.getElementById("b2bBuyBtn").addEventListener("click", async function(event) {
-            event.preventDefault(); // पेज को सीधे खुलने से रोकेगा
+            event.preventDefault(); 
 
             const token = localStorage.getItem("token");
 
@@ -282,7 +284,7 @@ document.getElementById("itemForm").addEventListener("submit", async function(e)
         });
     </script>
 <script>
-  document.addEventListener("DOMContentLoaded", () => {
+  document.addEventListener("DOMContentLoaded", async () => {
     const token = localStorage.getItem("token");
 
     const loginBtn = document.getElementById("login-btn");
@@ -290,12 +292,30 @@ document.getElementById("itemForm").addEventListener("submit", async function(e)
     const profileBtn = document.getElementById("profile-btn");
 
     if (token) {
-      // agar user login h to profile button dikhega login/register hide hoga
       if (loginBtn) loginBtn.style.display = "none";
       if (registerBtn) registerBtn.style.display = "none";
       if (profileBtn) profileBtn.style.display = "inline-block";
+
+      //user ka naam laga kar profile avatar me initials dikhaye
+      try {
+        const response = await fetch("http://localhost:5000/api/user/profile", {
+          method: "GET",
+          headers: { "Authorization": `Bearer ${token}` }
+        });
+        const data = await response.json();
+        if (response.ok && data.name) {
+          const nameParts = data.name.trim().split(" ");
+          let initials = nameParts[0][0];
+          if (nameParts.length > 1) {
+            initials += nameParts[1][0];
+          }
+          document.getElementById("profileAvatar").innerText = initials.toUpperCase();
+        }
+      } catch (err) {
+        console.error("Could not load profile initials", err);
+      }
+
     } else {
-      // user login ni h to Login/Register dikhega profile button hide hoga
       if (loginBtn) loginBtn.style.display = "inline-block";
       if (registerBtn) registerBtn.style.display = "inline-block";
       if (profileBtn) profileBtn.style.display = "none";

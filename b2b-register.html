@@ -17,7 +17,7 @@
             <h1>B2B & Recycler Verification</h1>
             <p>Upload official government licenses to get verified for bulk auctions & corporate pickup.</p>
         </div>
-         <form action="http://localhost:5000/submit-b2b-docs" method="POST" enctype="multipart/form-data">
+         <form id="b2bForm" onsubmit="submitB2BVerification(event)">
             <!-- SECTION 1: BUSINESS REGISTRATION -->
             <div class="form-section">
                 <h2><i class="fa-solid fa-building"></i> 1. Legal Business Details</h2>
@@ -73,42 +73,47 @@
         </form>
     </div>
 </div>
-     <script>
-        async function handleBulkAccess() {
-    const token = localStorage.getItem("token");
+    
+<script>
+    async function submitB2BVerification(event) {
+        event.preventDefault();
+        const token = localStorage.getItem("token");
 
-    if (!token) {
-        alert("कृपया पहले लॉगिन करें!");
-        window.location.href = "login.html";
-        return;
-    }
-
-    try {
-        // सर्वर से B2B स्टेटस चेक करने की रिक्वेस्ट
-        const response = await fetch("http://localhost:5000/api/b2b/check-status", {
-            method: "GET",
-            headers: {
-                "Authorization": `Bearer ${token}`
-            }
-        });
-
-        const data = await response.json();
-
-        if (response.ok && data.status === "Verified") {
-            // अगर एडमिन ने अप्रूव कर दिया है, तभी बल्क पार्ट्स वाला पेज खुलेगा
-            window.location.href = "bulk-parts.html"; // यहाँ अपने बल्क वाले पेज का नाम डाल देना
-        } else if (data.status === "Pending") {
-            alert("आपका B2B वेरिफिकेशन अभी पेंडिंग (Pending) है। कृपया एडमिन द्वारा अप्रूवल का इंतज़ार करें।");
-        } else {
-            alert("बल्क पार्ट्स सेक्शन खोलने के लिए पहले आपको B2B वेरिफिकेशन फॉर्म भरना होगा।");
-            window.location.href = "b2b-register.html"; // रजिस्ट्रेशन फॉर्म का पेज
+        if (!token) {
+            alert("You must be logged in to submit documents. ");
+            window.location.href = "login.html";
+            return;
         }
-    } catch (error) {
-        console.error("Error:", error);
-        alert("सर्वर से कनेक्ट करने में समस्या आ रही है!");
-    }
-}
-     </script>
 
+        const formData = new FormData();
+        formData.append("company_name", document.getElementById("company-name").value);
+        formData.append("gstin", document.getElementById("gstin").value);
+        formData.append("cpcb_id", document.getElementById("cpcb-id").value);
+        formData.append("gst_cert", document.querySelector('input[name="gst_cert"]').files[0]);
+        formData.append("cpcb_cert", document.querySelector('input[name="cpcb_cert"]').files[0]);
+
+        try {
+            const response = await fetch("http://localhost:5000/submit-b2b-docs", {
+                method: "POST",
+                headers: {
+                    "Authorization": `Bearer ${token}`
+                },
+                body: formData
+            });
+
+            const result = await response.json();
+
+            if (response.ok) {
+                alert("🎉 Documents submitted successfully! Status: Pending.");
+                window.location.href = "index.html"; 
+            } else {
+                alert("Error: " + result.message);
+            }
+        } catch (err) {
+            console.error("Error:", err);
+            alert("A server error occurred. Please try again later.");
+        }
+    }
+</script>
  </body>
 </html>

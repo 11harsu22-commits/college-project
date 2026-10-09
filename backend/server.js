@@ -293,5 +293,42 @@ app.post('/api/buy-item', authMiddleware, async (req, res) => {
         res.status(500).json({ message: "Server error while placing order", error: error.message });
     }
 });
+// ==========================================
+// B2B BULK BUY API ROUTE (With Verification Check)
+// ==========================================
+app.post('/api/buy-bulk', authMiddleware, async (req, res) => {
+    try {
+        // 1. Check if user's B2B verification is Approved
+        const b2bRecord = await B2BVerification.findOne({ userId: req.user.id });
+        if (!b2bRecord || b2bRecord.status !== "Approved") {
+            return res.status(403).json({ 
+                message: "Access Denied! Your B2B account is not verified or pending approval." 
+            });
+        }
+
+        // 2. Get data from request body
+        const { part_name, quantity, total_price, payment_method } = req.body;
+
+        if (!part_name || !quantity || !total_price) {
+            return res.status(400).json({ message: "All required fields for bulk order must be provided!" });
+        }
+
+        // 3. Save to Unified Order Model with order_type 'bulk'
+        const newBulkOrder = new Order({
+            userId: req.user.id,
+            order_type: 'bulk',
+            part_name,
+            quantity,
+            total_price,
+            payment_method: payment_method || "Bank Transfer"
+        });
+
+        await newBulkOrder.save();
+        res.status(201).json({ message: "B2B Bulk order saved successfully to Database!" });
+    } catch (error) {
+        console.error("Bulk Order Error:", error);
+        res.status(500).json({ message: "Server error while saving bulk order", error: error.message });
+    }
+});
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

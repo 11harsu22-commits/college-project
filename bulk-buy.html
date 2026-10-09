@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>B2B Bulk Purchase - Eco-Waste Hub</title>
+    
+    <link rel="stylesheet" href="bulk-buy.css">
+</head>
+<body>
+
+    <header>
+        <nav class="navbar">
+            <div class="logo"><a href="index.html">ReCircuit <span>EcoHub</span> (B2B Portal)</a></div>
+            <div class="nav-links"><a href="index.html">Back to Home</a></div>
+        </nav>
+    </header>
+
+    <div class="container">
+        <h2>B2B Bulk Spare Parts Ordering</h2>
+        <p>Select a scrap/spare part lot, specify your required quantity, and place your bulk order.</p>
+
+        <!-- 4 Bulk Parts Cards (Screen, Battery, Motherboard, Camera) -->
+        <div class="model-list" id="bulkPartsGrid">
+            <div class="model-card" onclick="selectBulkPart('Display Screens Lot', 2500, event)">
+                <h4>Display Screens (Lot)</h4>
+                <p>Bulk tested smartphone screens</p>
+                <p style="color:green; font-weight:bold;">₹ 2,500 per unit/box</p>
+            </div>
+            <div class="model-card" onclick="selectBulkPart('Batteries Lot', 1200, event)">
+                <h4>Phone Batteries (Lot)</h4>
+                <p>Certified bulk lithium-ion packs</p>
+                <p style="color:green; font-weight:bold;">₹ 1,200 per unit/box</p>
+            </div>
+            <div class="model-card" onclick="selectBulkPart('Motherboards Scrap', 5000, event)">
+                <h4>Motherboards Scrap</h4>
+                <p>Mixed laptop & mobile logic boards</p>
+                <p style="color:green; font-weight:bold;">₹ 5,000 per unit/box</p>
+            </div>
+            <div class="model-card" onclick="selectBulkPart('Camera Modules Lot', 1800, event)">
+                <h4>Camera Modules (Lot)</h4>
+                <p>Original pulled camera sensors</p>
+                <p style="color:green; font-weight:bold;">₹ 1,800 per unit/box</p>
+            </div>
+        </div>
+
+        <!-- Bulk Checkout & Quantity Section -->
+        <div class="checkout-box" id="bulkCheckoutSection" style="display: none;">
+            <h3>Complete B2B Bulk Order</h3>
+            <p>Selected Lot: <strong id="selectedPartText">None</strong></p>
+            
+            <div style="margin: 15px 0;">
+                <label><strong>Enter Quantity (Boxes/Lots):</strong></label><br>
+                <input type="number" id="bulkQuantity" value="1" min="1" oninput="calculateTotal()" style="padding: 8px; width: 150px; margin-top: 5px;">
+            </div>
+
+            <p>Total Estimated Price: <strong id="totalPriceText" style="color: #27ae60; font-size: 18px;">₹ 0</strong></p>
+
+            <label>Select Payment Mode (B2B Invoice):</label>
+            <div class="payment-options">
+                <label><input type="radio" name="b2b_payment" value="Bank Transfer" checked> Direct Bank Transfer (NEFT/RTGS)</label>
+                <label><input type="radio" name="b2b_payment" value="Company Credit"> 30-Day Business Credit</label>
+            </div>
+
+            <button onclick="confirmBulkPurchase()" class="btn btn-primary">Confirm Bulk Order & Save to DB</button>
+        </div>
+    </div>
+
+    <!-- अलग से जावास्क्रिप्ट लॉजिक इसी पेज पर -->
+    <script>
+        let selectedPartName = "";
+        let unitPrice = 0;
+
+        function selectBulkPart(partName, price, event) {
+            selectedPartName = partName;
+            unitPrice = price;
+
+            // Highlight selected card
+            document.querySelectorAll('.model-card').forEach(c => c.classList.remove('selected'));
+            event.currentTarget.classList.add('selected');
+
+            // Show checkout box
+            document.getElementById("selectedPartText").innerText = partName;
+            document.getElementById("bulkCheckoutSection").style.display = "block";
+            calculateTotal();
+        }
+
+        function calculateTotal() {
+            const qty = document.getElementById("bulkQuantity").value || 1;
+            const total = qty * unitPrice;
+            document.getElementById("totalPriceText").innerText = `₹ ${total.toLocaleString()}`;
+        }
+
+        async function confirmBulkPurchase() {
+            const token = localStorage.getItem("token");
+            if (!token) {
+                alert("Please login first as a B2B user!");
+                window.location.href = "login.html";
+                return;
+            }
+
+            const quantity = parseInt(document.getElementById("bulkQuantity").value) || 1;
+            const totalPrice = quantity * unitPrice;
+            const paymentMethod = document.querySelector('input[name="b2b_payment"]:checked').value;
+
+            const bulkData = {
+                part_name: selectedPartName,
+                quantity: quantity,
+                total_price: totalPrice,
+                payment_method: paymentMethod
+            };
+
+            try {
+                const response = await fetch("http://localhost:5000/api/buy-bulk", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Authorization": `Bearer ${token}`
+                    },
+                    body: JSON.stringify(bulkData)
+                });
+
+                const result = await response.json();
+
+                if (response.ok) {
+                    alert("🎉 B2B Bulk Order Successful! Data securely saved to MongoDB Database.");
+                    window.location.href = "index.html";
+                } else {
+                    alert("Error: " + result.message);
+                }
+            } catch (err) {
+                console.error("Error:", err);
+                alert("Server connection failed!");
+            }
+        }
+    </script>
+</body>
+</html>
